@@ -13,7 +13,7 @@ const Reports = () => {
     try {
 
       const response =
-        await API.get("/");
+        await API.get("/meetings");
 
       setTasks(response.data.data);
 

@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const MeetingForm = ({ addTask }) => {
+const MeetingForm = ({
+  addTask,
+  editingTask,
+  updateTask,
+  cancelEdit
+}) => {
 
   const [title, setTitle] = useState("");
   const [speaker, setSpeaker] = useState("");
@@ -20,6 +25,46 @@ const MeetingForm = ({ addTask }) => {
 
   const [duration, setDuration] =
     useState(30);
+
+  /* ================= DETECT EDIT MODE ================= */
+
+  const isEditing = editingTask !== null;
+
+  /* ================= AUTO-FILL ON EDIT ================= */
+
+  useEffect(() => {
+
+    if (editingTask) {
+
+      setTitle(editingTask.title || "");
+      setSpeaker(editingTask.speaker || "");
+      setStatus(editingTask.status || "Pending");
+
+      setEngagement(editingTask.engagement || 70);
+      setParticipation(editingTask.participation || 70);
+      setInterruptions(editingTask.interruptions || 2);
+      setClarity(editingTask.clarity || 70);
+      setDuration(editingTask.duration || 30);
+
+    }
+
+    else {
+
+      /* Reset to defaults when edit is cancelled */
+
+      setTitle("");
+      setSpeaker("");
+      setStatus("Pending");
+
+      setEngagement(70);
+      setParticipation(70);
+      setInterruptions(2);
+      setClarity(70);
+      setDuration(30);
+
+    }
+
+  }, [editingTask]);
 
   /* ================= SUBMIT ================= */
 
@@ -68,7 +113,19 @@ const MeetingForm = ({ addTask }) => {
 
     };
 
-    await addTask(newTask);
+    /* EDIT MODE → update | ADD MODE → add */
+
+    if (isEditing) {
+
+      await updateTask(editingTask._id, newTask);
+
+    }
+
+    else {
+
+      await addTask(newTask);
+
+    }
 
     /* RESET FORM */
 
@@ -261,11 +318,29 @@ const MeetingForm = ({ addTask }) => {
 
           </div>
 
+          {/* DYNAMIC BUTTONS */}
+
           <button type="submit">
 
-            Analyze Meeting
+            {isEditing
+              ? "Update Meeting"
+              : "Analyze Meeting"}
 
           </button>
+
+          {isEditing && (
+
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={cancelEdit}
+            >
+
+              Cancel
+
+            </button>
+
+          )}
 
         </form>
 

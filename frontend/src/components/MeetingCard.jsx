@@ -1,6 +1,7 @@
 const MeetingCard = ({
   task,
-  deleteTask
+  deleteTask,
+  onEdit
 }) => {
 
   return (
@@ -60,13 +61,28 @@ const MeetingCard = ({
         <span className="metric-value">{task.duration} min</span>
       </div>
 
-      <button
-        onClick={() =>
-          deleteTask(task._id)
-        }
-      >
-        Delete Task
-      </button>
+      {/* ACTION BUTTONS */}
+
+      <div className="card-actions">
+
+        <button
+          className="edit-btn"
+          onClick={() =>
+            onEdit(task)
+          }
+        >
+          Edit
+        </button>
+
+        <button
+          onClick={() =>
+            deleteTask(task._id)
+          }
+        >
+          Delete Task
+        </button>
+
+      </div>
 
     </div>
   );

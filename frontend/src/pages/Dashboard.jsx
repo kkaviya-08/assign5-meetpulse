@@ -24,6 +24,11 @@ const Dashboard = () => {
   const [healthScore, setHealthScore] =
     useState(0);
 
+  /* ================= EDIT MODE STATE ================= */
+
+  const [editingTask, setEditingTask] =
+    useState(null);
+
   /* ================= FETCH MEETINGS ================= */
 
   const fetchMeetings = async () => {
@@ -31,7 +36,7 @@ const Dashboard = () => {
     try {
 
       const response =
-        await API.get("/");
+        await API.get("/meetings");
 
       setTasks(response.data.data);
 
@@ -131,29 +136,73 @@ const Dashboard = () => {
 
   const addTask = async (task) => {
 
-  try {
+    try {
 
-    console.log(task);
+      console.log(task);
 
-    const response =
-      await API.post("/", task);
+      const response =
+        await API.post("/meetings", task);
 
-    console.log(response.data);
+      console.log(response.data);
 
-    setTasks([
-      ...tasks,
-      response.data.data
-    ]);
+      setTasks([
+        ...tasks,
+        response.data.data
+      ]);
 
-  }
+    }
 
-  catch (error) {
+    catch (error) {
 
-    console.log(error.response?.data);
+      console.log(error.response?.data);
 
-  }
+    }
 
-};
+  };
+
+  /* ================= UPDATE TASK ================= */
+
+  const updateTask = async (id, updatedTask) => {
+
+    try {
+
+      const response =
+        await API.put(
+          `/meetings/${id}`,
+          updatedTask
+        );
+
+      /* Replace old meeting with updated one */
+
+      setTasks(
+        tasks.map((task) =>
+          task._id === id
+            ? response.data.data
+            : task
+        )
+      );
+
+      setEditingTask(null);
+
+      alert("Meeting Updated Successfully!");
+
+    }
+
+    catch (error) {
+
+      console.log(error.response?.data);
+
+    }
+
+  };
+
+  /* ================= CANCEL EDIT ================= */
+
+  const cancelEdit = () => {
+
+    setEditingTask(null);
+
+  };
 
   /* ================= DELETE TASK ================= */
 
@@ -162,7 +211,7 @@ const Dashboard = () => {
     try {
 
       await API.delete(
-        `/${id}`
+        `/meetings/${id}`
       );
 
       const updatedTasks =
@@ -256,7 +305,12 @@ const Dashboard = () => {
 
           </div>
 
-          <MeetingForm addTask={addTask} />
+          <MeetingForm
+            addTask={addTask}
+            editingTask={editingTask}
+            updateTask={updateTask}
+            cancelEdit={cancelEdit}
+          />
 
         </div>
 
@@ -288,6 +342,7 @@ const Dashboard = () => {
                     key={task._id}
                     task={task}
                     deleteTask={deleteTask}
+                    onEdit={setEditingTask}
                   />
 
                 ))

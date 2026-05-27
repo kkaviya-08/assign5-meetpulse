@@ -1284,6 +1284,53 @@ img {
 }
 
 /* =========================================================
+   CARD ACTIONS (Edit + Delete Buttons)
+   ========================================================= */
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.card-actions button {
+  margin-top: 0;
+}
+
+.edit-btn {
+  background: rgba(0, 217, 255, 0.12) !important;
+  color: var(--accent-cyan) !important;
+  border: 1px solid rgba(0, 217, 255, 0.3) !important;
+}
+
+.edit-btn:hover {
+  background: var(--accent-cyan) !important;
+  color: #0f172a !important;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.3) !important;
+}
+
+/* ── Cancel Button (inside form) ── */
+
+.cancel-btn {
+  padding: 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(100, 116, 139, 0.2);
+  color: var(--text-secondary);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cancel-btn:hover {
+  background: rgba(100, 116, 139, 0.4);
+  color: var(--text-primary);
+}
+
+/* =========================================================
    ANIMATIONS
    ========================================================= */
 
